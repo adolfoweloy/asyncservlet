@@ -36,6 +36,7 @@ public class TomcatBootstrap {
 
         tomcat.start();
         System.out.println("UP http://localhost:" + tomcat.getConnector().getPort() + "/hello");
+        System.out.println("UP http://localhost:" + tomcat.getConnector().getPort() + "/hello-sync");
         tomcat.getServer().await();
     }
 
