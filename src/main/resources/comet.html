@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Comet Demo</title>
+</head>
+<body>
+    <button id="cometBtn">Start Comet Request</button>
+    <script>
+        document.getElementById('cometBtn').addEventListener('click', function() {
+            console.log("eita");
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://localhost:8080/hello-comet', true);
+            xhr.onreadystatechange = function() {
+                console.log("opa");
+                if (xhr.readyState === 3) { // Receiving partial data
+                    // Print the latest chunk to the console
+                    console.log('Partial response:', xhr.responseText);
+                }
+                if (xhr.readyState === 4) { // Done
+                    console.log('Final response:', xhr.responseText);
+                    console.log('opening a new connection');
+                    // Optionally, you can start a new request here
+                    xhr.open('GET', 'http://localhost:8080/hello-comet', true);
+                    xhr.send();
+                }
+            };
+            xhr.send();
+        });
+    </script>
+</body>
+</html>
+
