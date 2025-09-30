@@ -14,7 +14,7 @@ public class HelloServlet extends HttpServlet {
 
     @Override
     public void service(HttpServletRequest req, HttpServletResponse res) {
-        System.out.println("Processing in thread: " + Thread.currentThread().getName());
+        System.out.println("Handling the request in thread: " + Thread.currentThread().getName());
 
         AsyncContext asyncContext = req.startAsync();
         asyncContext.setTimeout(10_000);
@@ -30,7 +30,7 @@ public class HelloServlet extends HttpServlet {
         @Override
             public void run() {
                 try {
-                    System.out.println("Starting async in thread: "
+                    System.out.println("Processing async in thread: "
                             + Thread.currentThread().getName());
                     Thread.sleep(4_000);
                     var res = (HttpServletResponse) asyncContext.getResponse();
