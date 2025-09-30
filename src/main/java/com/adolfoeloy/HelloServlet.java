@@ -7,50 +7,50 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.concurrent.*;
 
 @WebServlet(value="/hello", name="helloServlet", asyncSupported = true)
 public class HelloServlet extends HttpServlet {
-
-    private final ExecutorService threadPoolExecutor =
-            new ThreadPoolExecutor(32, 32, 0, TimeUnit.SECONDS,
-                    new ArrayBlockingQueue<>(200), new ThreadPoolExecutor.AbortPolicy());
+    private final static String CUSTOM_THREAD_NAME = "custom-thread";
 
     @Override
     public void service(HttpServletRequest req, HttpServletResponse res) {
-
         System.out.println("Processing in thread: " + Thread.currentThread().getName());
 
         AsyncContext asyncContext = req.startAsync();
         asyncContext.setTimeout(10_000);
 
-        CompletableFuture
-            .supplyAsync(() -> {
-                System.out.println("Starting async in thread: " + Thread.currentThread().getName());
+        new Thread(
+                new BackgroundTask(asyncContext),
+                CUSTOM_THREAD_NAME
+        ).start();
+    }
+
+    private record BackgroundTask(AsyncContext asyncContext) implements Runnable {
+
+        @Override
+            public void run() {
                 try {
-                    Thread.sleep(4000);
+                    System.out.println("Starting async in thread: "
+                            + Thread.currentThread().getName());
+                    Thread.sleep(4_000);
+                    var res = (HttpServletResponse) asyncContext.getResponse();
+                    res.setContentType("application/json");
+                    writeResponse("Hello, World", 200);
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                return new Result("someValue");
-            }, threadPoolExecutor)
-            .whenComplete((result, err) -> {
-                try {
-                    if (err != null) {
-                        res.setStatus(500);
-                        res.getWriter().println("db error");
-                    } else {
-                        res.setContentType("application/json");
-                        res.getWriter().println("Hello, World " + result.name); }
-                } catch (IOException ignored) {
+                    writeResponse("db error", 500);
                 } finally {
                     asyncContext.complete();
                 }
-            });
+            }
 
+            private void writeResponse(String message, int status) {
+                var res = (HttpServletResponse) asyncContext.getResponse();
+                try {
+                    res.setStatus(status);
+                    res.getWriter().println(message);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
     }
-
-    record Result(String name) {
-    }
-
 }
