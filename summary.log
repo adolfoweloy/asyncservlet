@@ -1,0 +1,13 @@
+
+144523 1758675438.555837 accept(8,  <unfinished ...>
+144523 1758675440.167772 <... accept resumed>{sa_family=AF_INET6, sin6_port=htons(59396), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "::1", &sin6_addr), sin6_scope_id=0}, [28]) = 11
+144523 1758675440.175975 fcntl(11, F_GETFL) = 0x2 (flags O_RDWR)
+144523 1758675440.175994 fcntl(11, F_SETFL, O_RDWR|O_NONBLOCK) = 0
+144523 1758675440.177303 accept(8, {sa_family=AF_INET6, sin6_port=htons(59400), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "::1", &sin6_addr), sin6_scope_id=0}, [28]) = 12
+144522 1758675440.178150 epoll_ctl(9, EPOLL_CTL_ADD, 11, {events=EPOLLIN, data={u32=11, u64=126985003073547}}) = 0
+144522 1758675440.178661 epoll_ctl(9, EPOLL_CTL_DEL, 11, 0x737e05ffe514) = 0
+144512 1758675440.201383 read(11, "GET /hello HTTP/1.1\r\nHost: localhost:8080\r\nConnection: keep-alive\r\nsec-ch-ua: \"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"Google Chrome\";v=\"140\"\r\nsec-ch-ua-mobile: ?0\r\nsec-ch-ua-platform: \"Linux\"\r\nDNT: 1\r\nUpgrade-Insecure-Requests: 1\r\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\r\nSec-Fetch-Site: none\r\nSec-Fetch-Mode: navigate\r\nSec-Fetch-User: ?1\r\nSec-Fetch-Dest: document\r\nAccept-Encoding: gzip, deflate, br, zstd\r\nAccept-Language: en,en-US;q=0.9,pt;q=0.8,pt-BR;q=0.7,gl;q=0.6\r\n\r\n", 8192) = 695
+144512 1758675440.218610 write(1, "Processing in thread: http-nio-8080-exec-1\n", 43) = 43
+144513 1758675440.221963 write(1, "Processing async in thread: http-nio-8080-exec-2\n", 49) = 49
+144513 1758675444.231544 write(11, "HTTP/1.1 200 \r\nContent-Length: 14\r\nDate: Wed, 24 Sep 2025 00:57:24 GMT\r\nKeep-Alive: timeout=60\r\nConnection: keep-alive\r\n\r\nHello, World!\n", 136) = 136
+144522 1758675444.232235 epoll_ctl(9, EPOLL_CTL_ADD, 11, {events=EPOLLIN, data={u32=11, u64=11}}) = 0
